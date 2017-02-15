@@ -1,48 +1,62 @@
-# Class: bmc_patrol
-# ===========================
+# Bmc_patrol
 #
-# Full description of class bmc_patrol here.
+# Install the BMC Patrol agent
 #
-# Parameters
-# ----------
-#
-# Document parameters here.
-#
-# * `sample parameter`
-# Explanation of what this parameter affects and what it defaults to.
-# e.g. "Specify one or more upstream ntp servers as an array."
-#
-# Variables
-# ----------
-#
-# Here you should define a list of variables that this module would require.
-#
-# * `sample variable`
-#  Explanation of how this variable affects the function of this class and if
-#  it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#  External Node Classifier as a comma separated list of hostnames." (Note,
-#  global variables should be avoided in favor of class parameters as
-#  of Puppet 2.6.)
-#
-# Examples
-# --------
-#
-# @example
-#    class { 'bmc_patrol':
-#      servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
-#    }
-#
-# Authors
-# -------
-#
-# Author Name <author@domain.com>
-#
-# Copyright
-# ---------
-#
-# Copyright 2017 Your name here, unless otherwise noted.
-#
-class bmc_patrol {
+# Assumptions/prerequisites
+# * Firewall rules in place
+# * Partition/space for BMC allocated and mounted
+class bmc_patrol(
+    $media_source,
+    $download_dir   = undef,
+    $user           = $bmc_patrol::params::user,
+    $group          = $bmc_patrol::params::group,
+    $home           = $bmc_patrol::params::home,
+    $prereq_package = $bmc_patrol::params::prereq_package,
+    $creates        = $bmc_patrol::params::creates
+) inherits bmc_patrol::params {
+
+  user { $user:
+    ensure           => present,
+    gid              => $group,
+    home             => $home,
+    expiry           => absent,
+    password_max_age => -1,
+  }
+
+  group { $group:
+    ensure => present,
+  }
+
+  file { $home:
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
+    mode   => "0700",
+  }
+
+  # Install all prerequisites
+  ensure_packages($prereq_package, {'ensure' => 'present'})
+
+  #
+  # install BMC
+  #
+
+  # figure out the filename part of the media we are downloading, eg
+  # http://192.168.66.33/foo/bar/baz/patrol_agent_version_666_new_solaris.tar
+  # -> patrol_agent_version_666_new_solaris.tar
+  $filename = basename($media_source)
+
+  # From the filename, strip any .tar(.gz)? and you are left with the directory
+  # name
+  $dirname = regsubst($filename,'\.tar(\.gz)?$','')
+
+  include download_and_do
+  download_and_do::extract_and_run { $filename:
+    source       => $media_source,
+    run_relative => "cd ${dirname} && ./install.sh",
+    download_dir => $download_dir,
+    creates      => $creates,
+  }
 
 
 }

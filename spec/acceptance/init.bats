@@ -1,9 +1,7 @@
-# BATS test file to run after executing 'examples/init.pp' with puppet.
-#
-# For more info on BATS see https://github.com/sstephenson/bats
+@test "downloaded OK" {
+  ls /var/cache/download_and_do/download/FOOBAR.tar
+}
 
-# Tests are really easy! just the exit status of running a command...
-@test "addition using bc" {
-  result="$(ls /)"
-  [ "$?" -eq 0 ]
+@test "installed OK" {
+  grep "installed" /bmc_patrol.txt
 }
