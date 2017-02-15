@@ -1,0 +1,15 @@
+{
+  "name": "geoffwilliams/bmc_patrol",
+  "version": "0.1.0",
+  "author": "geoffwilliams",
+  "summary": "Install BMC Patrol agent with Puppet",
+  "license": "Apache-2.0",
+  "source": "https://github.com/GeoffWilliams/bmc_patrol",
+  "project_page": "https://github.com/GeoffWilliams/bmc_patrol",
+  "issues_url": "https://github.com/GeoffWilliams/bmc_patrol/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
