@@ -38,6 +38,7 @@ define easy_install(
     $environment    = undef,
     $arguments      = "",
     $media_dir      = undef,
+    $password       = undef,
 ) {
 
   # User if required
@@ -49,10 +50,9 @@ define easy_install(
       home             => pick($home, "/home/${user}"),
       expiry           => absent,
       password_max_age => -1,
+      password_min_age => -1,
+      password         => $password,
     }
-    $user_require = User[$user]
-  } else {
-    $user_require = undef
   }
 
   # Group if required
@@ -71,9 +71,6 @@ define easy_install(
       group  => $group,
       mode   => "0700",
     }
-    $home_require = File[$home]
-  } else {
-    $home_require = undef
   }
 
   file { $extract_dir:
