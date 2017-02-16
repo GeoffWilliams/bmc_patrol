@@ -9,7 +9,7 @@ file { "/opt/coolapp":
   mode   => "0700"
 }
 
-class { "easy_install":
+easy_install { "coolapp":
   media_source   => "/cut/spec/fixtures/coolapp.tar.gz",
   user           => "easy",
   group          => "easy",

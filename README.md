@@ -11,13 +11,14 @@
 
 ## Description
 
-Install BMC agent using a tarball downloaded from a web server that contains a silent install script (`install.sh`)
+Download and install packages from tarballs with with Puppet
+
 
 ## Setup
 
 ### What easy_install affects
-* Install a list of prereq_package
-* Create a `patrol` user and group
+* Install a hash of prerequisite packages on the system if required
+* Create a user and group if required
 * Download, extract and run the installer
 
 ## Usage
@@ -25,20 +26,20 @@ Install BMC agent using a tarball downloaded from a web server that contains a s
 ### Basic
 ```puppet
 class { "easy_install":
-  media_source   => "http://megacorp.com/software/BMCPATROL.tar",,
+  media_source   => "http://megacorp.com/software/coolapp.tar",
+  user           => "coolapp"
+  creates        => "/opt/coolapp"
 }
 ```
 Download tarball from media source, extract and run installer:
-* Run as user 'patrol'
-* Install into `/usr/patrol` on AIX, all other system to `/opt/patrol`
-* Only runs if `/(opt|usr)/patrol/Patrol3` does not yet exist (to prevent constant re-installation)
+* Run as user 'coolapp'
+* Only runs if `/opt/coolapp` does not yet exist (to prevent constant re-installation)
 
 ### Custom
 ```puppet
 class { "easy_install":
-  media_source   => "http://megacorp.com/software/BMCPATROL.tar",
+  media_source   => "http://megacorp.com/software/coolapp.tar",
   prereq_package => {"foo"=>{}, "bar"=>{}},
-  creates        => "/opt/patrol/Patrol3/magic"
   environment    => "FOO=bar",
   arguments      => "--foo",
 }
@@ -47,19 +48,18 @@ You can set parameters to the `easy_install` class to suit your needs, see class
 
 In this example, we:
 * Supplied a different list of prerequisites packages to install (`foo` and `bar`)
-* Detect whether we need to run checking for the absence of a file at `/opt/patrol/Patrol3/magic` - if the file is missing we download and run the installer
 * Supplied a custom environment to run the installation script (set shell variables, etc)
 * Passed the `--foo` option to our installer script
 
 ## Reference
 
-### Classes
+### Defined resource types
 * `easy_install` - Install BMC Patrol agent
 
 ## Limitations
 
 * Proxies not supported
-* The tarball must contain a directory with the same name as the downloaded file minus any `.tar.gz` extension.  Inside this directory, there must be an executable script called `install.sh`
+* Download platform must be supported by [puppet-archive](https://forge.puppet.com/puppet/archive/readme)
 * Not supported by Puppet, Inc.
 
 ## Development

@@ -2,7 +2,7 @@
   "name": "geoffwilliams/easy_install",
   "version": "0.1.0",
   "author": "geoffwilliams",
-  "summary": "Download and ionstall packages from tarballas with with Puppet",
+  "summary": "Download and install packages from tarballs with with Puppet",
   "license": "Apache-2.0",
   "source": "https://github.com/GeoffWilliams/easy_install",
   "project_page": "https://github.com/GeoffWilliams/easy_install",

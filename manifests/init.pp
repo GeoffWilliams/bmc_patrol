@@ -1,19 +1,17 @@
-# Bmc_patrol
+# easy_install
 #
-# Install the BMC Patrol agent
+# Download and install packages from tarballs with with Puppet
 #
 # Assumptions/prerequisites
-# * Firewall rules in place
-# * Partition/space for BMC allocated and mounted
 # * Installer files to remain permanently on the server
 #
 # @param title not used/for refrence only
 # @param media_source Full URL/path to download media
 # @param download_dir Location to store downloaded file,
 # @param extract_dir Where to unpack the installation media
-# @param user User for the patrol user
-# @param group Group for the patrol user
-# @param home Homedir for the patrol user
+# @param user User to own extracted files and run the installer as
+# @param group Group to own extracted files
+# @param home Homedir for the user - will be created
 # @param prereq_package Hash of packages to install first
 # @param creates File who's presence indicates we do not need to (re)install
 # @param install_cmd Install command to run
@@ -22,22 +20,21 @@
 # @param arguments Arguments to run the install script with
 # @param media_dir Directory inside the archive containing the installation
 #   script (we will enter this directory before running the installer)
-class easy_install(
+define easy_install(
     $media_source,
     $download_dir   = undef,
-    $extract_dir    = $easy_install::params::extract_dir,
+    $extract_dir    = "/backup",
     $user           = undef,
     $group          = undef,
     $home           = undef,
     $prereq_package = {},
     $creates        = undef,
-    $install_cmd    = $easy_install::params::install_cmd,
+    $install_cmd    = "./install.sh",
     $allow_insecure = false,
     $environment    = undef,
     $arguments      = "",
     $media_dir      = undef,
-
-) inherits easy_install::params {
+) {
 
   # User if required
   if $user {
@@ -88,8 +85,8 @@ class easy_install(
   #
 
   # figure out the filename part of the media we are downloading, eg
-  # http://192.168.66.33/foo/bar/baz/patrol_agent_version_666_new_solaris.tar
-  # -> patrol_agent_version_666_new_solaris.tar
+  # http://192.168.66.33/foo/bar/baz/easy_agent_version_666_new_solaris.tar
+  # -> east_agent_version_666_new_solaris.tar
   $filename = basename($media_source)
 
   # Figure out the directory contained inside this tarball.  If the user told us
