@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'bmc_patrol' do
+describe 'easy_install' do
   let :pre_condition do
     'include download_and_do'
   end
@@ -20,6 +20,6 @@ describe 'bmc_patrol' do
   end
 
   context 'with default values for all parameters' do
-    it { should contain_class('bmc_patrol') }
+    it { should contain_class('easy_install') }
   end
 end

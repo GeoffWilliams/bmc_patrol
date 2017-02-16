@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/GeoffWilliams/bmc_patrol.svg?branch=master)](https://travis-ci.org/GeoffWilliams/bmc_patrol)
-# bmc_patrol
+[![Build Status](https://travis-ci.org/GeoffWilliams/easy_install.svg?branch=master)](https://travis-ci.org/GeoffWilliams/easy_install)
+# easy_install
 
 #### Table of Contents
 
@@ -15,7 +15,7 @@ Install BMC agent using a tarball downloaded from a web server that contains a s
 
 ## Setup
 
-### What bmc_patrol affects
+### What easy_install affects
 * Install a list of prereq_package
 * Create a `patrol` user and group
 * Download, extract and run the installer
@@ -24,7 +24,7 @@ Install BMC agent using a tarball downloaded from a web server that contains a s
 
 ### Basic
 ```puppet
-class { "bmc_patrol":
+class { "easy_install":
   media_source   => "http://megacorp.com/software/BMCPATROL.tar",,
 }
 ```
@@ -35,7 +35,7 @@ Download tarball from media source, extract and run installer:
 
 ### Custom
 ```puppet
-class { "bmc_patrol":
+class { "easy_install":
   media_source   => "http://megacorp.com/software/BMCPATROL.tar",
   prereq_package => {"foo"=>{}, "bar"=>{}},
   creates        => "/opt/patrol/Patrol3/magic"
@@ -43,7 +43,7 @@ class { "bmc_patrol":
   arguments      => "--foo",
 }
 ```
-You can set parameters to the `bmc_patrol` class to suit your needs, see class definition for details.
+You can set parameters to the `easy_install` class to suit your needs, see class definition for details.
 
 In this example, we:
 * Supplied a different list of prerequisites packages to install (`foo` and `bar`)
@@ -54,7 +54,7 @@ In this example, we:
 ## Reference
 
 ### Classes
-* `bmc_patrol` - Install BMC Patrol agent
+* `easy_install` - Install BMC Patrol agent
 
 ## Limitations
 
