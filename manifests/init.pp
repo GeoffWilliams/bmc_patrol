@@ -16,6 +16,7 @@
 # @param prereq_package Hash of packages to install first
 # @param creates File who's presence indicates we do not need to (re)install
 # @param install_cmd Install command to run
+# @param allow_insecure Allow insecure https to download files
 # @param environment Shell environment to run the install script with
 # @param arguments Arguments to run the install script with
 
@@ -29,6 +30,7 @@ class bmc_patrol(
     $prereq_package = $bmc_patrol::params::prereq_package,
     $creates        = $bmc_patrol::params::creates,
     $install_cmd    = $bmc_patrol::params::install_cmd,
+    $allow_insecure = false,
     $environment    = undef,
     $arguments      = "",
 ) inherits bmc_patrol::params {
