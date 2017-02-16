@@ -22,12 +22,34 @@ Install BMC agent using a tarball downloaded from a web server that contains a s
 
 ## Usage
 
+### Basic
 ```puppet
 class { "bmc_patrol":
   media_source   => "http://megacorp.com/software/BMCPATROL.tar",,
 }
 ```
-Download tarball from media source, extract and run installer
+Download tarball from media source, extract and run installer:
+* Run as user 'patrol'
+* Install into `/usr/patrol` on AIX, all other system to `/opt/patrol`
+* Only runs if `/(opt|usr)/patrol/Patrol3` does not yet exist (to prevent constant re-installation)
+
+### Custom
+```puppet
+class { "bmc_patrol":
+  media_source   => "http://megacorp.com/software/BMCPATROL.tar",
+  prereq_package => {"foo"=>{}, "bar"=>{}},
+  creates        => "/opt/patrol/Patrol3/magic"
+  environment    => "FOO=bar",
+  arguments      => "--foo",
+}
+```
+You can set parameters to the `bmc_patrol` class to suit your needs, see class definition for details.
+
+In this example, we:
+* Supplied a different list of prerequisites packages to install (`foo` and `bar`)
+* Detect whether we need to run checking for the absence of a file at `/opt/patrol/Patrol3/magic` - if the file is missing we download and run the installer
+* Supplied a custom environment to run the installation script (set shell variables, etc)
+* Passed the `--foo` option to our installer script
 
 ## Reference
 

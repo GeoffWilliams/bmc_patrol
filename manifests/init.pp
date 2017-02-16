@@ -5,6 +5,20 @@
 # Assumptions/prerequisites
 # * Firewall rules in place
 # * Partition/space for BMC allocated and mounted
+# * Installer files to remain permanently on the server
+#
+# @param media_source Full URL/path to download media
+# @param download_dir Location to store downloaded file,
+# @param extract_dir Where to unpack the installation media
+# @param user User for the patrol user
+# @param group Group for the patrol user
+# @param home Homedir for the patrol user
+# @param prereq_package Hash of packages to install first
+# @param creates File who's presence indicates we do not need to (re)install
+# @param install_cmd Install command to run
+# @param environment Shell environment to run the install script with
+# @param arguments Arguments to run the install script with
+
 class bmc_patrol(
     $media_source,
     $download_dir   = undef,
@@ -13,7 +27,10 @@ class bmc_patrol(
     $group          = $bmc_patrol::params::group,
     $home           = $bmc_patrol::params::home,
     $prereq_package = $bmc_patrol::params::prereq_package,
-    $creates        = $bmc_patrol::params::creates
+    $creates        = $bmc_patrol::params::creates,
+    $install_cmd    = $bmc_patrol::params::install_cmd,
+    $environment    = undef,
+    $arguments      = "",
 ) inherits bmc_patrol::params {
 
   user { $user:
@@ -61,7 +78,7 @@ class bmc_patrol(
   include download_and_do
   download_and_do::extract_and_run { $filename:
     source       => $media_source,
-    run_relative => "cd ${dirname} && ./install.sh",
+    run_relative => "cd ${dirname} && ${install_cmd} ${arguments}",
     download_dir => $download_dir,
     extract_dir  => $extract_dir,
     creates      => $creates,

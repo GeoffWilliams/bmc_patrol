@@ -2,8 +2,6 @@
 #
 # Params pattern
 class bmc_patrol::params {
-  $user  = "patrol"
-  $group = "patrol"
   case $facts['os']['family'] {
     "AIX": {
       $home = "/usr/patrol"
@@ -27,7 +25,9 @@ class bmc_patrol::params {
       fail("Module ${module_name} does not support ${facts['os']['family']}")
     }
   }
-
-  $creates = "${home}/Patrol3"
-  $extract_dir = "/backup"
+  $user         = "patrol"
+  $group        = "patrol"
+  $creates      = "${home}/Patrol3"
+  $extract_dir  = "/backup"
+  $install_cmd  = "./install.sh"
 }
