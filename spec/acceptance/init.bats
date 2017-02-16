@@ -3,5 +3,5 @@
 }
 
 @test "installed OK" {
-  grep "installed" /bmc_patrol.txt
+  grep "installed" /opt/patrol/status.txt
 }

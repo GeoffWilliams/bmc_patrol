@@ -13,12 +13,14 @@ class bmc_patrol::params {
     }
     "RedHat": {
       $home = "/opt/patrol"
-      $prereq_package = [
-        "compat-libstdc++-296.i686",
-        "compat-libstdc++-33.i686",
-        "nss-softokn-freebl.i686",
-        "glibc.i686 pam-devel.i686"
-      ]
+
+      # HASH of packages so that we may specify install source, etc
+      $prereq_package = {
+        "compat-libstdc++-296.i686" => {},
+        "compat-libstdc++-33.i686"  => {},
+        "nss-softokn-freebl.i686"   => {},
+        "glibc.i686 pam-devel.i686" => {},
+      }
 
     }
     default: {
@@ -27,4 +29,5 @@ class bmc_patrol::params {
   }
 
   $creates = "${home}/Patrol3"
+  $extract_dir = "/backup"
 }

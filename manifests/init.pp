@@ -8,6 +8,7 @@
 class bmc_patrol(
     $media_source,
     $download_dir   = undef,
+    $extract_dir    = $bmc_patrol::params::extract_dir,
     $user           = $bmc_patrol::params::user,
     $group          = $bmc_patrol::params::group,
     $home           = $bmc_patrol::params::home,
@@ -28,6 +29,13 @@ class bmc_patrol(
   }
 
   file { $home:
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
+    mode   => "0700",
+  }
+
+  file { $extract_dir:
     ensure => directory,
     owner  => $user,
     group  => $group,
@@ -55,7 +63,15 @@ class bmc_patrol(
     source       => $media_source,
     run_relative => "cd ${dirname} && ./install.sh",
     download_dir => $download_dir,
+    extract_dir  => $extract_dir,
     creates      => $creates,
+    user         => $user,
+    group        => $group,
+    require      => [
+      Package[keys($prereq_package)],
+      User[$user],
+      File[$extract_dir],
+    ],
   }
 
 
