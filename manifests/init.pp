@@ -10,7 +10,9 @@
 # @param download_dir Location to store downloaded file,
 # @param extract_dir Where to unpack the installation media
 # @param user User to own extracted files and run the installer as
+# @param uid Make sure user has a speific UID
 # @param group Group to own extracted files
+# @param gid Make sure user has a specific GID
 # @param home Homedir for the user - will be created
 # @param prereq_package Hash of packages to install first
 # @param creates File who's presence indicates we do not need to (re)install
@@ -25,7 +27,9 @@ define easy_install(
     $download_dir   = undef,
     $extract_dir    = "/backup",
     $user           = undef,
+    $uid            = undef,
     $group          = undef,
+    $gid            = undef,
     $home           = undef,
     $prereq_package = {},
     $creates        = undef,
@@ -40,7 +44,8 @@ define easy_install(
   if $user {
     user { $user:
       ensure           => present,
-      gid              => $group,
+      uid              => $uid,
+      gid              => pick($gid, $group),
       home             => pick($home, "/home/${user}"),
       expiry           => absent,
       password_max_age => -1,
@@ -54,6 +59,7 @@ define easy_install(
   if $group {
     group { $group:
       ensure => present,
+      gid    => $gid,
     }
   }
 
