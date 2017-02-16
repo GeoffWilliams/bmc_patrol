@@ -22,23 +22,28 @@
 # @param arguments Arguments to run the install script with
 # @param media_dir Directory inside the archive containing the installation
 #   script (we will enter this directory before running the installer)
+# @param password Set a login password for any user we create
+# @param comment Set a comment for any user we create
+# @param user_attributes Set these attributes on any user we create (AIX)
 define easy_install(
     $media_source,
-    $download_dir   = undef,
-    $extract_dir    = "/backup",
-    $user           = undef,
-    $uid            = undef,
-    $group          = undef,
-    $gid            = undef,
-    $home           = undef,
-    $prereq_package = {},
-    $creates        = undef,
-    $install_cmd    = "./install.sh",
-    $allow_insecure = false,
-    $environment    = undef,
-    $arguments      = "",
-    $media_dir      = undef,
-    $password       = undef,
+    $download_dir    = undef,
+    $extract_dir     = "/backup",
+    $user            = undef,
+    $uid             = undef,
+    $group           = undef,
+    $gid             = undef,
+    $home            = undef,
+    $prereq_package  = {},
+    $creates         = undef,
+    $install_cmd     = "./install.sh",
+    $allow_insecure  = false,
+    $environment     = undef,
+    $arguments       = "",
+    $media_dir       = undef,
+    $password        = undef,
+    $user_comment    = undef,
+    $user_attributes = undef,
 ) {
 
   # User if required
@@ -52,6 +57,8 @@ define easy_install(
       password_max_age => -1,
       password_min_age => -1,
       password         => $password,
+      comment          => $user_comment,
+      attributes       => $user_attributes,
     }
   }
 
