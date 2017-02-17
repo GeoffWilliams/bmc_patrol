@@ -80,12 +80,15 @@ define easy_install(
     }
   }
 
-  file { $extract_dir:
-    ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => "0700",
-  }
+  # protect against duplicate resources
+  ensure_resource("file", $extract_dir,
+    {
+      "ensure" => "directory",
+      "owner"  => $user,
+      "group"  => $group,
+      "mode"   => "0700",
+    }
+  )
 
   # Install all prerequisites
   ensure_packages($prereq_package, {'ensure' => 'present'})
